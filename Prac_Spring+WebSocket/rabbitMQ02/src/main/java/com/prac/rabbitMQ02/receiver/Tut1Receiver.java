@@ -1,4 +1,4 @@
-package com.prac.rabbitMQ02;
+package com.prac.rabbitMQ02.receiver;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

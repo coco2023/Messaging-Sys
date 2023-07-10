@@ -1,5 +1,7 @@
-package com.prac.rabbitMQ02;
+package com.prac.rabbitMQ02.config;
 
+import com.prac.rabbitMQ02.receiver.Tut1Receiver;
+import com.prac.rabbitMQ02.sender.Tut1Sender;
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

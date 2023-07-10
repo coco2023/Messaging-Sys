@@ -1,4 +1,4 @@
-package com.prac.rabbitMQ02;
+package com.prac.rabbitMQ;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +15,6 @@ public class RabbitAmqpTutorialsRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Ready ... running for " + duration + "ms");
-        Thread.sleep(duration);
-        ctx.close();
+
     }
 }

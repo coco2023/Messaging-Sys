@@ -1,6 +1,5 @@
-package com.prac.rabbitMQ02;
+package com.prac.rabbitMQ;
 
-import com.prac.rabbitMQ02.rabbitRunner.RabbitAmqpTutorialsRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,13 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-
 @EnableScheduling
 @SpringBootApplication
-public class RabbitMq02Application {
+public class RabbitMqApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RabbitMq02Application.class, args);
+		SpringApplication.run(RabbitMqApplication.class, args);
 	}
 
 	@Profile("usage_message")
@@ -22,7 +20,7 @@ public class RabbitMq02Application {
 	public CommandLineRunner usage() {
 		return args -> {
 			System.out.println("This app uses Spring Profiles to control its behavior.\n");
-					System.out.println("Sample usage: java -jar rabbit-tutorials.jar --spring.profiles.active=hello-world,sender");
+			System.out.println("Sample usage: java -jar rabbit-tutorials.jar --spring.profiles.active=hello-world,sender");
 		};
 	}
 
