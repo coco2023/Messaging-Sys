@@ -15,15 +15,18 @@ public class RabbitMqApplication {
 		SpringApplication.run(RabbitMqApplication.class, args);
 	}
 
+	// should be active only when the "usage_message" profile is active
 	@Profile("usage_message")
 	@Bean
 	public CommandLineRunner usage() {
+		// defining the behavior of the run() method
 		return args -> {
 			System.out.println("This app uses Spring Profiles to control its behavior.\n");
 			System.out.println("Sample usage: java -jar rabbit-tutorials.jar --spring.profiles.active=hello-world,sender");
 		};
 	}
 
+	// should be active when the "usage_message" profile is not active
 	@Profile("!usage_message")
 	@Bean
 	public CommandLineRunner tutorial() {

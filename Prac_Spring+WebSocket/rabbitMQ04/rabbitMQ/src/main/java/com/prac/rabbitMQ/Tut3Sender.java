@@ -30,8 +30,8 @@ public class Tut3Sender {
         }
         builder.append(count.incrementAndGet());
         String message = builder.toString();
-        template.convertAndSend(fanout.getName(), "", message);
-        System.out.println(" [x] Sent '" + message + "'");
+        template.convertAndSend(fanout.getName(), "", message);  // The routing key is a message attribute taken into account by the exchange when deciding how to route a message
+        System.out.println(" [x] Sent '" + message + "'" + template);
     }
 
 }
