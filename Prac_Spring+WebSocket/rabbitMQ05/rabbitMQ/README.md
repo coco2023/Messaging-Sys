@@ -10,5 +10,5 @@
 
 4. sender: `java -jar target/rabbitMQ-0.0.1-SNAPSHOT.jar --spring.profiles.active=routing,sender --tutorial.client.duration=60000`
 
-5. result:
+5. result:<br>
 ![](./doc/routing.png)
