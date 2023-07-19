@@ -4,8 +4,10 @@
 
 [2] https://www.endpointdev.com/blog/2020/04/messaging-app-spring-kafka-pt-two/
 
+[3] https://www.endpointdev.com/blog/2020/05/messaging-app-spring-kafka-pt-three/
 
-## Step
+
+## Step 2
 
 - Kafka & Docker & Zookeeper
   1. create `docker-compose.yml`
@@ -26,6 +28,14 @@
 - Redis Config
   1. start Redis: `sudo service redis-server start` enter password
   2. `redis-cli`
+
+## Step 3
+
+create basic enetities & their impl
+
+1. We’re not going to integrate the cache environment as Spring persistent data, so we won’t be using the CrudRepository implementation for the cache repository
+2. Activation and Authentication
+3. Activation is a one-time process to activate a mobile number for our messaging service client. After an activation our simple authentication service will provide an access token to messaging client, and this access token will be used for future client logins. To achieve these simple processes we need to create our authentication service interface.
 
 ## Postgre Database
 
