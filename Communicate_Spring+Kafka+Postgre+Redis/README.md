@@ -51,7 +51,7 @@ configure and prepare the WebSocket session pool
 - define our WebSocket message handler `MessageHandler` and Kafka message producer `MessageSender`. We also need a session pool `WebSocketPool` so we can manage the client sessions
 
 file changes: <br>
-<img src="doc/step4%20-%20file%20changes.png"  width="50%" height="20%">
+  <img src="doc/step4%20-%20file%20changes.png"  width="45%" height="20%">
 
 
 ## Step 5
@@ -70,7 +70,47 @@ Solution: testing by `jedisPool.getResource()`
 - ERROR: ` servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.dao.InvalidDataAccessResourceUsageException: JDBC exception executing SQL [select u1_0.user_id,u1_0.created_at,u1_0.fname,u1_0.lname,u1_0.mobile from users u1_0 where u1_0.mobile=?] [ERROR: relation "users" does not exist Position: 76] [n/a]; SQL [n/a]] with root cause` <br>
   - Solution: `spring.jpa.hibernate.ddl-auto=update`
 
-## Postgre Database
+
+## Step 6
+- ERROR: JSONObject["sendTo"] not found <br>
+  Solution: add `sendTo` in the Json request 
+  ```
+  { "accessToken": "872eeb3f-a8cd-4240-925f-01c671405c37", "sendTo": 17, "msg": "test02" }
+  ```
+
+1. debug
+
+2. producer: `curl -H "Content-Type: application/json" -X POST localhost:9001/api/message/send-message -d '{ "accessToken": "5ba31d67-4770-4278-9a68-dd2e02f812b5", "sendTo": 2, "msg": "hi! this is a test01" }'`  -- consumer will receive
+   ```
+   { "accessToken": "5ba31d67-4770-4278-9a68-dd2e02f812b5", "sendTo": 2, "msg": "hi! this is a test01" }
+   ```
+3. producer: `curl -H "Content-Type: application/json" -X POST localhost:9001/api/message/send-message -d '{ "accessToken": "6aa4c5eb-a202-4516-9898-d35355ecfc1a", "sendTo": 1, "msg": "yes! I see the test01" }'`  -- consumer will receive
+    ```
+    { "accessToken": "6aa4c5eb-a202-4516-9898-d35355ecfc1a", "sendTo": 1, "msg": "yes! I see the test01" }
+    ```
+4. communicate result
+   ![communicate-result](doc/step6-communicate-result.png)
+   ![communicate-result-url](doc/step6-communicate-result-url.png)
+   
+5. **ERROR NOT SOLVED**
+
+    ERROR: `Caused by: org.json.JSONException: JSONObject["sendTo"] not found.`
+
+    ERROR LOG:
+      ```
+      ***jsonObject:{"msg":"{ \"accessToken\": \"5ba31d67-4770-4278-9a68-dd2e02f812b5\", \"sendTo\": 2, \"msg\": \"hi! this is a test03\" }","accessToken":"5ba31d67-4770-4278-9a68-dd2e02f812b5"}, headers:{kafka_offset=9, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@1ca2f197, kafka_timestampType=CREATE_TIME, kafka_receivedPartitionId=0, kafka_receivedTopic=WEATHER, kafka_receivedTimestamp=1689890793173, kafka_groupId=foo}
+
+      ERROR 14812 --- [ntainer#0-0-C-1] o.s.kafka.listener.DefaultErrorHandler   : Backoff FixedBackOff{interval=0, currentAttempts=10, maxAttempts=9} exhausted for WEATHER-0@9
+
+      Caused by: org.json.JSONException: JSONObject["sendTo"] not found.
+
+      Solution: 
+      // TODO: add contacts to users
+      
+      ```
+
+
+## Postgre Database & Output
 
 1. Postgre database <br>
 ![postgre](doc/postgre.png)
@@ -83,3 +123,23 @@ Solution: testing by `jedisPool.getResource()`
 
 4. login - step5
 ![](doc/5-login.png)
+
+5. communicate
+![communicate-result](doc/step6-communicate-result.png)
+![communicate-result-url](doc/step6-communicate-result-url.png)
+
+6. databse <br>
+- userDB
+![user](doc/step6-postgreDB-user.png)
+- accessTokenDB:
+![accessToken](doc/step6-postgreDB-accessToken.png)
+
+7. step 6 -file changes   
+   <!-- <div>
+    <img src="doc/step6-communicate-file-changes.png"  width="50%" height="20%">
+    <img src="doc/step6-communicate-file-changes2.png"  width="50%" height="20%">
+   </div> -->
+
+   communicate-file-changes  |  communicate-file-changes2
+    :-------------------------:|:-------------------------:
+    ![](doc/step6-communicate-file-changes.png)  |  ![](doc/step6-communicate-file-changes2.png)

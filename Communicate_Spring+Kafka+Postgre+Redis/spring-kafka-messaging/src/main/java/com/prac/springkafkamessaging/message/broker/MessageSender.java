@@ -1,4 +1,4 @@
-package com.prac.springkafkamessaging.websocket.broker;
+package com.prac.springkafkamessaging.message.broker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

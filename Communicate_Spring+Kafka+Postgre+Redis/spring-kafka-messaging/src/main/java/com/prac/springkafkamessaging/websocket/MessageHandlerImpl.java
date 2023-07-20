@@ -1,5 +1,8 @@
 package com.prac.springkafkamessaging.websocket;
 
+import com.prac.springkafkamessaging.message.broker.MessageReceiver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,6 +18,8 @@ import java.util.Set;
  */
 @Service
 public class MessageHandlerImpl implements MessageHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageReceiver.class);
 
     @Override
     public void addSessionToPool(Long userId, WebSocketSession session) {
@@ -57,6 +62,8 @@ public class MessageHandlerImpl implements MessageHandler {
             for (WebSocketSession sessionItem : userSessions) {
                 if (sessionItem.equals(session)) {
                     userSessions.remove(session);
+                } else {
+                    LOG.info("This session is not equal hmm: " + sessionItem.hashCode() + " <> " + session.hashCode());
                 }
             }
         }

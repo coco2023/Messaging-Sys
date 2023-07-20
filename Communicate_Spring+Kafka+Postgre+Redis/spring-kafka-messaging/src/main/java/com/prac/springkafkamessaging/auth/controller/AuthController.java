@@ -110,4 +110,22 @@ public class AuthController {
                     HttpStatus.OK);
         }
     }
+
+    @RequestMapping(value = "/getcontacts", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Object> getContacts(@Valid @RequestBody ContactRequest activationRequest) {
+
+        int code = StringHelper.generateRandomNumber(6);
+
+        // save the activation code to the cache repository (cached auth token)
+        User user = userRepository.findByToken(activationRequest.getAccessToken());
+
+        ContactResponse contactResponse = ContactResponse.builder()
+                .contacts(user.getContacts())
+                .build();
+
+        return new ResponseEntity<>(
+                contactResponse,
+                HttpStatus.OK
+        );
+    }
 }

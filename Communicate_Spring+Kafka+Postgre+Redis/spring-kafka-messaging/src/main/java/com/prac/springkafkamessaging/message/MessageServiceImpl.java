@@ -66,6 +66,44 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findByFromUserIdAndToUserId(fromUserId, toUserId);
     }
 
+    @Override
+    public void sendMessageToUser(String accessToken, Long sendTo, String msg, String topic) {
+
+        Long senderUserId = 0L;
+
+        // first: find the senderId in the cache
+        String senderId = cacheRepository.getUserIdByAccessToken(accessToken);
+
+        // second: find the senderId in the database
+        if (senderId == null) {
+            User sender = userRepository.findByToken(accessToken);
+            if (sender != null) {
+                senderUserId = sender.getUserId();
+            }
+        } else {
+            senderUserId = Long.valueOf(senderId);
+        }
+        if (senderUserId == 0L) {
+            LOGGER.info("Invalid sender " + senderUserId);
+            return;
+        }
+
+        try {
+            // enrich message with senderId and topic
+            JSONObject msgJson = new JSONObject();
+            msgJson.put("msg", msg);
+            msgJson.put("senderId", senderUserId);
+            msgJson.put("topic", topic);
+
+            LOGGER.info("msgJson: " + msgJson);
+
+            messageHandler.sendMessageToUser(sendTo, msgJson.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
     private void storeMessageToUser(Message message){
         messageRepository.save(message);
     }

@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import com.prac.springkafkamessaging.cache.CacheRepository;
 import com.prac.springkafkamessaging.persistent.model.User;
 import com.prac.springkafkamessaging.persistent.repository.UserRepository;
-import com.prac.springkafkamessaging.websocket.broker.MessageSender;
+import com.prac.springkafkamessaging.message.broker.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -24,6 +24,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
+
+    private String currentTopic = "WEATHER";
 
     @Autowired
     CacheRepository cacheRepository;
@@ -100,14 +102,15 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage (WebSocketSession session, TextMessage textMessage) throws Exception {
 
-        JSONObject jsonpObject = new JSONObject(textMessage.getPayload());
-        String topic = jsonpObject.getString("topic");
+        JSONObject jsonObject = new JSONObject(textMessage.getPayload());
+        String topic = jsonObject.getString("topic");
+        JSONObject message = jsonObject.getJSONObject("message");
 
         // only SEND_MESSAGE topic is available
-        if (topic == null && !topic.equals("SEND_MESSAGE")) {
+        if (topic == null && !topic.equals(currentTopic)) {
             return;
         }
 
-        messageSender.send(topic, textMessage.getPayload());
+        messageSender.send(topic, message.toString());
     }
 }

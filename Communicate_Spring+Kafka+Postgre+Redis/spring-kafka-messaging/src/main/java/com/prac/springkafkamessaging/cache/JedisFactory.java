@@ -10,18 +10,13 @@ import redis.clients.jedis.JedisPoolConfig;
 public class JedisFactory {
 
 //    @Value("${cache.redis.host}")
-    @Value("${spring.data.redis.host}")
+//    @Value("${spring.data.redis.host}")
     private static String host="localhost";
 
-//    @Value("${cache.redis.port}")
-    @Value("${spring.data.redis.port}")
     private static Integer port = 6379;
 
-//    @Value("${cache.redis.timeout}")
     private static Integer timeout = 10000;
 
-//    @Value("${cache.redis.password}")
-    @Value("${spring.data.redis.password}")
     private static String password = "12345";
 
     // hide the constructor
