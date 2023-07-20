@@ -26,8 +26,8 @@ public class Contact {
     @Column(name="contact_user_id")
     private Long contactUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contact_user_id", nullable = false, insertable = false, updatable = false, referencedColumnName = "user_id")
     private User user;
 
 }

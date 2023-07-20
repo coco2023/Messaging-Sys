@@ -6,6 +6,10 @@
 
 [3] https://www.endpointdev.com/blog/2020/05/messaging-app-spring-kafka-pt-three/
 
+[4] https://www.endpointdev.com/blog/2021/01/messaging-app-spring-kafka-pt-four/
+
+[5] https://www.endpointdev.com/blog/2022/10/messaging-app-spring-kafka-pt-five/
+
 
 ## Step 2
 
@@ -37,6 +41,35 @@ create basic enetities & their impl
 2. Activation and Authentication
 3. Activation is a one-time process to activate a mobile number for our messaging service client. After an activation our simple authentication service will provide an access token to messaging client, and this access token will be used for future client logins. To achieve these simple processes we need to create our authentication service interface.
 
+## Step 4
+
+configure and prepare the WebSocket session pool
+
+- authentication and storing messages on the time of socket messages and sessions received
+- create a WebSocketHandler for WebSocket configuration
+- WebSocket session message is received we’re going to send the message to a Kafka topic
+- define our WebSocket message handler `MessageHandler` and Kafka message producer `MessageSender`. We also need a session pool `WebSocketPool` so we can manage the client sessions
+
+file changes: <br>
+<img src="doc/step4%20-%20file%20changes.png"  width="50%" height="20%">
+
+
+## Step 5
+
+- ERROR <br>
+`Can't run Jedis example: JedisConnectionException: Could not get a resource from the pool` <br>
+Solution: testing by `jedisPool.getResource()`
+- Then Got ERROR: `ERR AUTH <password> called without any password configured for the default user. Are you sure your configuration is corre` <br>
+  - Solution: https://medium.com/@umutuluer/resolving-the-err-client-sent-auth-but-no-password-is-set-error-b81438d10843
+  ```
+  > redis-cli
+  > CONFIG SET requirepass "12345"
+  > AUTH 12345
+  ```
+
+- ERROR: ` servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.dao.InvalidDataAccessResourceUsageException: JDBC exception executing SQL [select u1_0.user_id,u1_0.created_at,u1_0.fname,u1_0.lname,u1_0.mobile from users u1_0 where u1_0.mobile=?] [ERROR: relation "users" does not exist Position: 76] [n/a]; SQL [n/a]] with root cause` <br>
+  - Solution: `spring.jpa.hibernate.ddl-auto=update`
+
 ## Postgre Database
 
 1. Postgre database <br>
@@ -45,3 +78,8 @@ create basic enetities & their impl
 2. Kafka Producer-Consumer Messaging sending <br>
 ![messages](doc/step2.png)
    
+3. getcode - step5
+![5-getcode](doc/5-getcode.png)
+
+4. login - step5
+![](doc/5-login.png)

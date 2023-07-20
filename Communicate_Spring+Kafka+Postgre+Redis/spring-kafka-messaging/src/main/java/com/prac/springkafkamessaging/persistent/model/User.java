@@ -1,5 +1,6 @@
 package com.prac.springkafkamessaging.persistent.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -15,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="users")
+@Table(name = "users")
 
 public class User implements Serializable {
 
@@ -36,8 +38,11 @@ public class User implements Serializable {
     @Column(name="created_at")
     private Date createdAt;
 
-    @OneToMany(mappedBy = "User", fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    private Set<Contact> contacts;
+    @ManyToMany
+    @JoinTable(
+            name = "contacts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "contact_id"))
+    private List<Contact> contacts;
 
 }

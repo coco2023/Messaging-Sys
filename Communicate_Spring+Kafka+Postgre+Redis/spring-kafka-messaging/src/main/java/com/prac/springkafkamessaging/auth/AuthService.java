@@ -1,9 +1,12 @@
 package com.prac.springkafkamessaging.auth;
 
+import com.prac.springkafkamessaging.persistent.model.AccessToken;
+
 public interface AuthService {
 
     void putAccessToken(String code, Long userId);
 
-    void loginWithAccessToken(String mobile, String code);
+    Long loginWithAccessToken(String token);
 
+    AccessToken getAccessToken(Long userId);
 }

@@ -2,7 +2,9 @@ package com.prac.springkafkamessaging.auth;
 
 import com.prac.springkafkamessaging.cache.CacheRepository;
 import com.prac.springkafkamessaging.persistent.model.AccessToken;
+import com.prac.springkafkamessaging.persistent.model.User;
 import com.prac.springkafkamessaging.persistent.repository.AccessTokenRepository;
+import com.prac.springkafkamessaging.persistent.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,13 @@ import java.util.Calendar;
 public class AuthServiceImpl implements AuthService{
 
     @Autowired
-    CacheRepository cacheRepository;
+    private CacheRepository cacheRepository;
 
     @Autowired
-    AccessTokenRepository accessTokenRepository;
+    private AccessTokenRepository accessTokenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
@@ -34,7 +39,21 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public void loginWithAccessToken(String mobile, String code) {
-        // TODO
+    public Long loginWithAccessToken(String token) {
+        String userIdStr = cacheRepository.getUserIdByAccessToken(token);
+        if (userIdStr == null) {
+            User user = userRepository.findByToken(token);
+            if (user != null) {
+                return user.getUserId();
+            } else {
+                return 0L;
+            }
+        }
+        return Long.valueOf(userIdStr);
+    }
+
+    @Override
+    public AccessToken getAccessToken(Long userId) {
+        return accessTokenRepository.findByUserId(userId);
     }
 }

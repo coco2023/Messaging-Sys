@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccessTokenRepository extends JpaRepository<AccessToken, Long> {
+
+    AccessToken findByUserId(Long userId);
 }
