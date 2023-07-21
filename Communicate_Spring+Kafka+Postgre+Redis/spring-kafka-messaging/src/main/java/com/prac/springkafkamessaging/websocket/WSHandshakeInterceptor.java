@@ -1,8 +1,8 @@
 package com.prac.springkafkamessaging.websocket;
 
-import com.prac.springkafkamessaging.cache.CacheRepository;
-import com.prac.springkafkamessaging.persistent.model.User;
-import com.prac.springkafkamessaging.persistent.repository.UserRepository;
+import com.prac.springkafkamessaging.repository.cache.CacheRepository;
+import com.prac.springkafkamessaging.entity.User;
+import com.prac.springkafkamessaging.repository.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;

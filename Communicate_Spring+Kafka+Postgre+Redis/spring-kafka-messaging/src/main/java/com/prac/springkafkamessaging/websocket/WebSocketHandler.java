@@ -1,11 +1,12 @@
 package com.prac.springkafkamessaging.websocket;
 
+import com.prac.springkafkamessaging.service.message.MessageHandler;
 import org.json.JSONObject;
 
-import com.prac.springkafkamessaging.cache.CacheRepository;
-import com.prac.springkafkamessaging.persistent.model.User;
-import com.prac.springkafkamessaging.persistent.repository.UserRepository;
-import com.prac.springkafkamessaging.message.broker.MessageSender;
+import com.prac.springkafkamessaging.repository.cache.CacheRepository;
+import com.prac.springkafkamessaging.entity.User;
+import com.prac.springkafkamessaging.repository.persistence.UserRepository;
+import com.prac.springkafkamessaging.kafka.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
