@@ -36,26 +36,26 @@ function login() {
   });
 }
 
-function loadContacts() {
-  var getcontactsFormData = JSON.stringify({
-    'accessToken': $("#accessToken").val(),
-  });  // -- ContactRequest
-
-  $("#contactlist").empty();
-  $.ajax({
-    type: "POST",
-    url: "http://localhost:9001/api/auth/getcontacts",
-    data: getcontactsFormData,   // it is ContactRequest
-    contentType: "application/json;charset=utf-8",
-    success: function(contactResponse){   // response after successful request -- return contactResponse
-        console.log("here the contacts: ", JSON.stringify(contactResponse));
-        contactResponse.contacts.forEach(function(c) {
-            console.log(c.user.mobile);
-            $("#contactlist").append('<tr><td><input type="checkbox" id="sendTo" value="' + c.contactUserId + '">' + c.user.mobile + '</input></td></tr>');
-        });
-    }
-  });
-}
+// function loadContacts() {
+//   var getcontactsFormData = JSON.stringify({
+//     'accessToken': $("#accessToken").val(),
+//   });  // -- ContactRequest
+//
+//   $("#contactlist").empty();
+//   $.ajax({
+//     type: "POST",
+//     url: "http://localhost:9001/api/auth/getcontacts",
+//     data: getcontactsFormData,   // it is ContactRequest
+//     contentType: "application/json;charset=utf-8",
+//     success: function(contactResponse){   // response after successful request -- return contactResponse
+//         console.log("here the contacts: ", JSON.stringify(contactResponse));
+//         contactResponse.contacts.forEach(function(c) {
+//             console.log(c.user.mobile);
+//             $("#contactlist").append('<tr><td><input type="checkbox" id="sendTo" value="' + c.contactUserId + '">' + c.user.mobile + '</input></td></tr>');
+//         });
+//     }
+//   });
+// }
 
 /**
  * connect(): this method establishes a WebSocket connection to the server.
@@ -96,7 +96,7 @@ function setConnected(connected) {
     $("#disconnect").prop("disabled", !connected);  // When connected is true, it enables the "Disconnect" button &
                                                           // & allowing the user to click it to disconnect from the WebSocket server
     if(connected) {
-        loadContacts();
+        // loadContacts();
         $("#chatbox").show();
     } else {
         $("#chatbox").hide();

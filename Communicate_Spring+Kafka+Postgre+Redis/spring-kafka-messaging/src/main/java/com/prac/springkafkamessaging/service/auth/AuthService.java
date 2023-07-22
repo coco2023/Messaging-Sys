@@ -9,4 +9,6 @@ public interface AuthService {
     Long loginWithAccessToken(String token);
 
     AccessToken getAccessToken(Long userId);
+
+
 }

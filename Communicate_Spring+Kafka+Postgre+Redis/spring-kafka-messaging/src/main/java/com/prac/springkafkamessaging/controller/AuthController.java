@@ -1,11 +1,14 @@
 package com.prac.springkafkamessaging.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prac.springkafkamessaging.dto.*;
+import com.prac.springkafkamessaging.entity.Contact;
 import com.prac.springkafkamessaging.service.auth.AuthService;
 import com.prac.springkafkamessaging.repository.cache.CacheRepository;
 import com.prac.springkafkamessaging.entity.AccessToken;
 import com.prac.springkafkamessaging.entity.User;
 import com.prac.springkafkamessaging.repository.persistence.UserRepository;
+import com.prac.springkafkamessaging.service.contract.ContactService;
 import com.prac.springkafkamessaging.util.StringHelper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Calendar;
-import java.util.UUID;
+import java.util.*;
+
+import static org.springframework.beans.BeanUtils.copyProperties;
 
 /**
  * AuthController is consumed by a client application
@@ -42,6 +46,9 @@ public class AuthController {
 
     @Autowired
     CacheRepository cacheRepository;
+
+    @Autowired
+    private ContactService contactService;
 
     @RequestMapping(value = "/getcode", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Object> getCode(@Valid @RequestBody ActivationRequest activationRequest) {
@@ -112,21 +119,96 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/getcontacts", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Object> getContacts(@Valid @RequestBody ContactRequest activationRequest) {
+//    @RequestMapping(value = "/getcontacts", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    public ResponseEntity<Object> getContacts(@Valid @RequestBody ContactRequest activationRequest) {
+//
+//        // save the activation code to the cache repository (cached auth token)
+//        User user = userRepository.findByToken(activationRequest.getAccessToken());
+//
+//        ContactResponse contactResponse = ContactResponse.builder()
+//                .contacts(user.getContact())
+//                .build();
+//
+//        return new ResponseEntity<>(
+//                contactResponse,
+//                HttpStatus.OK
+//        );
+//    }
 
-        int code = StringHelper.generateRandomNumber(6);
+    @PostMapping("/addcontacts")
+    public ResponseEntity<Object> addContacts(@RequestBody ContactRequest contactRequest ) {
 
-        // save the activation code to the cache repository (cached auth token)
-        User user = userRepository.findByToken(activationRequest.getAccessToken());
+        // find current user by token
+        User currentUser = userRepository.findByToken(contactRequest.getAccessToken());
+        log.info("current user: " + currentUser);
 
-        ContactResponse contactResponse = ContactResponse.builder()
-                .contacts(user.getContacts())
-                .build();
+        // get added contact user info
+        User addUser = userRepository.findByMobile(contactRequest.getMobile());
+        log.info("add contact user: " + addUser);
+
+        if (currentUser.getContact() == null) {
+            log.info("****current user dont have contact****");
+            // create new contact list
+            List<User> userList = new ArrayList<>();
+            userList.add(addUser);
+
+            Contact addContact = Contact.builder()
+                    .contacterId(currentUser.getUserId())
+                    .user(userList)
+                    .build();
+            contactService.save(addContact);
+
+            // update current User's contact
+            User user = User.builder()
+                    .userId(currentUser.getUserId())
+                    .mobile(currentUser.getMobile())
+                    .fname(currentUser.getFname())
+                    .lname(currentUser.getLname())
+                    .createdAt(currentUser.getCreatedAt())
+                    .contact(addContact)
+                    .build();
+
+            userRepository.save(user);
+            copyProperties(currentUser, user);
+
+            ContactResponse response = ContactResponse.builder()
+                            .contacts(addContact)
+                                    .build();
+
+            log.info("ContactResponse:" + response);
+
+            log.info("update success~" + user.getContact().getUser());
+        }
+        else {
+            log.info("****current user has contact****");
+            // get currentUser's contact List ID
+            Long contactListId = currentUser.getContact().getContactListId();
+            log.info("ContactListId:" + contactListId);
+            Contact currentContact = contactService.finById(contactListId);
+            log.info("currentContact:" + currentContact.getUser());
+
+            currentContact.addUser(addUser);
+
+            // update current User's contact
+            User user = User.builder()
+                    .userId(currentUser.getUserId())
+                    .mobile(currentUser.getMobile())
+                    .fname(currentUser.getFname())
+                    .lname(currentUser.getLname())
+                    .createdAt(currentUser.getCreatedAt())
+                    .contact(currentContact)
+                    .build();
+
+            userRepository.save(user);
+            copyProperties(currentUser, user);
+
+            log.info("update success***" + user.getContact().getUser());
+        }
 
         return new ResponseEntity<>(
-                contactResponse,
+                "Successfully added contact!",
                 HttpStatus.OK
         );
     }
+
 }

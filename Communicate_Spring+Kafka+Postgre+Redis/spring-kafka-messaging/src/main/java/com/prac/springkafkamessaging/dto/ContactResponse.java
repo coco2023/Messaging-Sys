@@ -15,6 +15,6 @@ import java.util.List;
 
 public class ContactResponse {
 
-    private List<Contact> contacts;
+    private Contact contacts;
 
 }

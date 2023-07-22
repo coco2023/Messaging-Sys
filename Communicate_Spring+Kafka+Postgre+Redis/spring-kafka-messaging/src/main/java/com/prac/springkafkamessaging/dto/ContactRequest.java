@@ -14,4 +14,8 @@ public class ContactRequest {
 
     private String accessToken;
 
+    private Long addUserId;
+
+    private String mobile;
+
 }

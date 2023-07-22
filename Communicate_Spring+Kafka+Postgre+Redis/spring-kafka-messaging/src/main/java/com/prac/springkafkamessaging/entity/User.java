@@ -1,22 +1,20 @@
 package com.prac.springkafkamessaging.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name = "users")
-
+@Table(name = "user", schema = "public")
 public class User implements Serializable {
 
     @Id
@@ -36,11 +34,8 @@ public class User implements Serializable {
     @Column(name="created_at")
     private Date createdAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "contacts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "contact_id"))
-    private List<Contact> contacts;
+    @ManyToOne
+    @JoinColumn
+    private Contact contact;
 
 }

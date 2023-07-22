@@ -1,33 +1,34 @@
 package com.prac.springkafkamessaging.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.util.List;
+
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="contacts")
+@Table(name = "contact", schema = "public")
 
 public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="contact_id")
-    private Long contactId;
+    private Long contactListId;
 
-    @Column(name="user_id")
-    private Long userId;
+    private Long contacterId;
 
-    @Column(name="contact_user_id")
-    private Long contactUserId;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contact", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<User> user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contact_user_id", nullable = false, insertable = false, updatable = false, referencedColumnName = "user_id")
-    private User user;
+    public void addUser (User newUser) {
+        this.user.add(newUser);
+    }
 
 }
