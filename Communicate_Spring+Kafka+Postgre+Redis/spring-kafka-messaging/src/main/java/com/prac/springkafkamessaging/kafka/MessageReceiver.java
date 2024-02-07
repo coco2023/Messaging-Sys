@@ -27,7 +27,7 @@ public class MessageReceiver {
 
         // convert String into JSON object
         JSONObject jsonObject = new JSONObject(message);
-        LOG.info("***jsonObject:" + jsonObject + ", headers:" + headers);
+        LOG.info("***jsonObject:" + jsonObject.keys() + ", headers:" + headers);
 
         // TODO: add contacts to users
 

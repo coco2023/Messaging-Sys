@@ -1,6 +1,7 @@
 package com.prac.springkafkamessaging.websocket;
 
 import com.prac.springkafkamessaging.service.message.MessageHandler;
+import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 
 import com.prac.springkafkamessaging.repository.cache.CacheRepository;
@@ -24,6 +25,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
  */
 
 @Component
+@Log4j2
 public class WebSocketHandler extends TextWebSocketHandler {
 
     private String currentTopic = "WEATHER";
@@ -40,6 +42,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String parameters[] = session.getUri().getQuery().split("=");
+
+        log.info("WebSocketSession parameters:" + parameters.toString());
 
         if (parameters.length == 2 && parameters[0].equals("accessToken")) {
 
@@ -72,6 +76,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished (WebSocketSession session) throws  Exception {
 
         String parameters[] = session.getUri().getQuery().split("=");
+        log.info("WebSocketSession parameters:" + parameters.toString());
 
         if (parameters.length == 2 && parameters[0].equals("accessToken")) {
             String accessToken = parameters[1];
@@ -113,5 +118,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
 
         messageSender.send(topic, message.toString());
+        log.info("message send success!" + message);
     }
 }
