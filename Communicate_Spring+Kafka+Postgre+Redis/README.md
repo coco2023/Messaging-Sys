@@ -1,3 +1,38 @@
+## Postgre Database & Output
+
+1. Postgre database <br>
+![postgre](doc/postgre.png)
+
+2. Kafka Producer-Consumer Messaging sending <br>
+![messages](doc/step2.png)
+   
+3. getcode - step5  <br>
+![5-getcode](doc/5-getcode.png)
+
+4. login - step5
+![](doc/5-login.png)
+
+5. communicate
+![communicate-result](doc/step6-communicate-result.png)
+![communicate-result-url](doc/step6-communicate-result-url.png)
+
+6. databse <br>
+- userDB
+![user](doc/step6-postgreDB-user.png)
+- accessTokenDB:
+![accessToken](doc/step6-postgreDB-accessToken.png)
+
+7. step 6 -file changes   
+   <!-- <div>
+    <img src="doc/step6-communicate-file-changes.png"  width="50%" height="20%">
+    <img src="doc/step6-communicate-file-changes2.png"  width="50%" height="20%">
+   </div> -->
+
+   communicate-file-changes  |  communicate-file-changes2
+    :-------------------------:|:-------------------------:
+    ![](doc/step6-communicate-file-changes.png)  |  ![](doc/step6-communicate-file-changes2.png)
+
+
 ## Refer
 
 [1] dependencies: https://www.endpointdev.com/blog/2020/04/messaging-app-spring-kafka-pt-one/
